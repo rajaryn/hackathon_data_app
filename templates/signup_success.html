@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful</title>
+    <style>
+        /* --- RESET --- */
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Full Viewport Height */
+            width: 100vw;  /* Full Viewport Width */
+            position: relative; /* Anchor for absolute positioning */
+        }
+
+        /* --- THE FIX: Absolute Centering --- */
+        .success-card {
+            background-color: #ffffff;
+            padding: 50px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+
+            /* Force center using coordinates */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* --- Icon & Typography --- */
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background-color: #d1fae5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+        }
+        .icon-checkmark {
+            font-size: 40px;
+            color: #059669;
+            line-height: 1;
+        }
+
+        h1 {
+            color: #1f2937;
+            margin: 0 0 15px 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        p {
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 35px;
+        }
+
+        /* --- Buttons --- */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+        .btn-secondary:hover {
+            background-color: #f9fafb;
+            border-color: #9ca3af;
+            color: #374151;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-40%) translate(-50%); top: 55%; } /* Adjusted for absolute pos */
+            to { opacity: 1; transform: translate(-50%, -50%); top: 50%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="success-card">
+        <div class="icon-circle">
+            <div class="icon-checkmark">✓</div>
+        </div>
+        
+        <h1>Details Added Successfully!</h1>
+        <p>You have successfully added your team details. The database has been updated.</p>
+        
+        <div class="btn-container">
+            <a href="{{ url_for('signup') }}" class="btn btn-primary">Add Details for Another Hackathon</a>
+            <a href="{{ url_for('participants') }}" class="btn btn-secondary">View All Entries</a>
+        </div>
+    </div>
+
+</body>
+</html>

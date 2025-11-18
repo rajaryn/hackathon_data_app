@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Entries</title>
+    <style>
+        /* --- RESET & LAYOUT --- */
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            background-color: #f0f2f5; 
+        }
+
+        /* --- NAVBAR STYLING --- */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 40px;
+            display: flex;
+            /* 💡 This pushes the first item to the Left and last item to the Right */
+            justify-content: space-between; 
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Status Badge Styles */
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.85em;
+            font-weight: 700;
+            border: 1px solid;
+            transition: all 0.3s ease;
+            cursor: help;
+            background-color: white; 
+        }
+
+        .status-badge.connected {
+            background-color: #f0fdf4; 
+            color: #15803d; 
+            border-color: #bbf7d0;
+        }
+        .status-badge.disconnected {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border-color: #fca5a5;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .status-badge.connected .status-dot {
+            background-color: #22c55e;
+            box-shadow: 0 0 0 2px #dcfce7;
+            animation: pulse 2s infinite;
+        }
+        .status-badge.disconnected .status-dot {
+            background-color: #ef4444;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* Nav Button */
+        .btn-nav {
+            background-color: #3b82f6; 
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-nav:hover { background-color: #2563eb; }
+        .btn-nav:active { transform: translateY(1px); }
+
+        /* --- MAIN CONTENT CONTAINER --- */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 { color: #1e3a8a; font-weight: 600; margin-bottom: 20px; }
+        h2 { color: #2c3e50; font-size: 1.3em; margin-top: 30px; margin-bottom: 15px; border-left: 4px solid #3b82f6; padding-left: 10px; }
+
+        /* --- FILTER FORM --- */
+        .filter-form { 
+            padding: 20px; 
+            background-color: white; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .filter-form label { font-weight: 600; color: #4b5563; }
+        select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-size: 1em;
+            flex-grow: 1; 
+            max-width: 400px;
+        }
+
+        /* --- TABLES --- */
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            background-color: white; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); 
+        }
+        th, td { 
+            border-bottom: 1px solid #e5e7eb; 
+            padding: 15px; 
+            text-align: left; 
+        }
+        th { 
+            background-color: #34495e; 
+            color: white; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.05em;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #f8fafc; }
+        
+        /* --- ANALYSIS BOX --- */
+        .analysis-container { 
+            border: 1px solid #dbeafe;
+            margin-bottom: 30px; 
+            background-color: #eff6ff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .analysis-container table { box-shadow: none; background-color: transparent; }
+        .analysis-container table th {
+            background-color: #bfdbfe; 
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+
+        /* --- MESSAGES --- */
+        .message { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 500; }
+        .success { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .error { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* --- DELETE BUTTON --- */
+        .delete-btn { 
+            background-color: #e74c3c; 
+            color: white; 
+            border: none; 
+            padding: 6px 12px; 
+            cursor: pointer; 
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            font-size: 0.9em;
+        }
+        .delete-btn:hover { background-color: #c0392b; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        
+        {% if db_status %}
+            <div class="status-badge connected" title="Connection established">
+                <div class="status-dot"></div>
+                <span>System Online</span>
+            </div>
+        {% else %}
+            <div class="status-badge disconnected" title="Cannot reach Google Sheets">
+                <div class="status-dot"></div>
+                <span>System Offline</span>
+            </div>
+        {% endif %}
+        
+        <a href="{{ url_for('signup') }}" class="btn-nav">+ Add Entry</a>
+        
+    </nav>
+
+    <div class="container">
+
+        <h1>View & Manage Entries</h1>
+        
+        {% if delete_message %}
+            {% if '✅' in delete_message %}
+                <p class="message success">{{ delete_message }}</p>
+            {% elif '🚨' in delete_message or '⚠️' in delete_message %}
+                <p class="message error">{{ delete_message }}</p>
+            {% endif %}
+        {% endif %}
+        
+        <form method="GET" class="filter-form">
+            <label for="hackathon">Select Hackathon:</label>
+            <select id="hackathon" name="hackathon" required onchange="this.form.submit()">
+                <option value="">-- All Entries --</option>
+                {% for hackathon in unique_hackathons %}
+                    <option value="{{ hackathon }}" {% if hackathon == selected_hackathon %}selected{% endif %}>
+                        {{ hackathon }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+        
+        {% if selected_hackathon %}
+            <h2>Analysis: Unique Participants in {{ selected_hackathon }} ({{ unique_participants_list|length }} total)</h2>
+            
+            <div class="analysis-container">
+                <table style="width: 100%; border: none;">
+                    <thead>
+                        <tr>
+                            <th>Participant Name</th>
+                            <th>Participant Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for name in unique_participants_list %}
+                            {% if loop.index0 is even %}
+                                <tr>
+                                    <td>{{ name }}</td>
+                            {% else %}
+                                    <td>{{ name }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        {% if unique_participants_list|length is odd %}
+                            <td></td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <h2>Management Table: {% if selected_hackathon %}Filtered Entries{% else %}All Entries{% endif %}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Hackathon Name</th>
+                    <th>Team Members</th>
+                    <th>Timestamp</th>
+                    <th>Unique ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                    <tr>
+                        <td><strong>{{ entry[1] }}</strong></td> 
+                        <td>{{ entry[2] }}</td> 
+                        <td style="color: #666; font-size: 0.9em;">{{ entry[3] }}</td> 
+                        <td style="font-family: monospace; color: #666;">{{ entry[0][:8] }}...</td> 
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_entry') }}" style="display:inline;">
+                                <input type="hidden" name="unique_id" value="{{ entry[0] }}">
+                                <input type="submit" value="Delete" 
+                                    onclick="return confirm('Delete entry for: {{ entry[2] }}?');" class="delete-btn">
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="5" style="text-align: center; padding: 30px; color: #888;">No entries found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div> </body>
+</html>
