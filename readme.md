@@ -11,14 +11,14 @@ A Python-based web application designed to track student participation in hackat
 - **Responsive Design:** Works on mobile and desktop.
 - **Vercel Ready:** Configured for serverless deployment on Vercel.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend:** Python (Flask)
 - **Database:** Google Sheets API (`gspread`,`google-auth`)
 - **Frontend:** HTML, CSS (Jinja2 templates)
 - **Hosting:** Vercel
 
-## ⚙️ Local Setup
+## Local Setup
 
 Follow these steps to run the project locally on your machine.
 
@@ -64,7 +64,7 @@ python app.py
 
 Visit `http://127.0.0.1:5000` in your browser.
 
-## 🚀 Deployment on Vercel
+## Deployment on Vercel
 
 This project includes a `vercel.json` configuration for easy deployment.
 
@@ -73,7 +73,7 @@ This project includes a `vercel.json` configuration for easy deployment.
 3.  **Environment Variables:** If you are using Google Sheets, you cannot upload `credentials.json` to GitHub. You must add the contents of that JSON file as Environment Variables in Vercel (e.g., `GOOGLE_CREDENTIALS`).
 4.  Click **Deploy**.
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 hackathon_participation_app/
@@ -85,7 +85,7 @@ hackathon_participation_app/
 └── README.md            # Project documentation
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome\! Please open an issue or submit a pull request.
 
@@ -95,7 +95,7 @@ Contributions are welcome\! Please open an issue or submit a pull request.
 4.  Push to the branch (`git push origin feature/AmazingFeature`).
 5.  Open a Pull Request.
 
-## 📝 License
+## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
